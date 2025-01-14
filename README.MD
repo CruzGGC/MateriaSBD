@@ -492,72 +492,26 @@ SELECT nome, CalcularIdade(data_nascimento) AS idade
 FROM alunos;
 ```
 
----
-
-# Triggers e Indexes no MySQL
-
-## Triggers
-
-### Sintaxe para Criar um Trigger
-```sql
-CREATE TRIGGER nome_do_trigger
-[BEFORE | AFTER] [INSERT | UPDATE | DELETE]
-ON nome_da_tabela
-FOR EACH ROW
-BEGIN
-    -- Corpo do trigger
-    instruções_sql;
-END;
-```
-
-### Exemplo de Trigger
-```sql
-DELIMITER //
-
-CREATE TRIGGER AtualizarEstoque
-AFTER INSERT ON vendas
-FOR EACH ROW
-BEGIN
-    UPDATE produtos
-    SET quantidade = quantidade - NEW.quantidade_vendida
-    WHERE id = NEW.produto_id;
-END //
-
-DELIMITER ;
-```
-
-## Indexes
-
-### Sintaxe para Criar um Índice
-```sql
-CREATE INDEX nome_do_indice
-ON nome_da_tabela (coluna1, coluna2, ...);
-```
-
-### Exemplo de Índice
-```sql
-CREATE INDEX idx_nome
-ON alunos (nome);
-```
-
-### Exemplo de Índice Único
-```sql
-CREATE UNIQUE INDEX idx_email
-ON professores (email);
-```
-
----
+Claro! Aqui está uma explicação sobre tratamento de erros e transações no MySQL em Markdown:
 
 # Tratamento de Erros e Transações no MySQL
 
 ## Tratamento de Erros
 
+O tratamento de erros em MySQL pode ser feito usando manipuladores de erro (handlers) dentro de procedimentos armazenados e funções. Isso permite que você capture e responda a erros específicos que ocorrem durante a execução de consultas SQL.
+
 ### Sintaxe para Criar um Manipulador de Erro
+Para criar um manipulador de erro, usamos a instrução `DECLARE ... HANDLER`.
+
 ```sql
 DECLARE handler_tipo HANDLER
     FOR condição
     instrução;
 ```
+
+### Tipos de Handlers
+- **CONTINUE HANDLER:** Continua a execução após o erro.
+- **EXIT HANDLER:** Sai do procedimento ou função após o erro.
 
 ### Exemplo de Tratamento de Erros
 ```sql
@@ -579,8 +533,68 @@ END //
 DELIMITER ;
 ```
 
+### Explicação do Exemplo
+- **DECLARE CONTINUE HANDLER FOR SQLEXCEPTION:** Define um manipulador que continua a execução e define uma mensagem de erro na variável `@erro` se ocorrer uma exceção SQL.
+- **SQLEXCEPTION:** Captura qualquer erro SQL.
+
 ## Transações
+
+Transações são usadas para garantir que um conjunto de operações SQL sejam executadas de maneira atômica, ou seja, todas as operações são executadas com sucesso ou nenhuma delas é aplicada. Isso é útil para manter a integridade dos dados.
 
 ### Comandos de Controle de Transação
 - **START TRANSACTION:** Inicia uma nova transação.
-- **COMMIT:** Confirma todas as operações na transação
+- **COMMIT:** Confirma todas as operações na transação atual.
+- **ROLLBACK:** Desfaz todas as operações na transação atual.
+
+### Exemplo de Transação
+```sql
+START TRANSACTION;
+
+-- Tenta inserir um registro
+INSERT INTO contas (id, saldo) VALUES (1, 1000);
+
+-- Atualiza o saldo de uma conta
+UPDATE contas SET saldo = saldo - 100 WHERE id = 1;
+
+-- Se ambas as operações forem bem-sucedidas, confirma a transação
+COMMIT;
+```
+
+### Exemplo com Tratamento de Erros e Transações
+```sql
+DELIMITER //
+
+CREATE PROCEDURE TransferirFundos(IN conta_origem INT, IN conta_destino INT, IN valor DECIMAL(10, 2))
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        -- Se ocorrer um erro, desfaz a transação
+        ROLLBACK;
+        SELECT 'Transação falhou, todas as operações foram revertidas';
+    END;
+
+    -- Inicia a transação
+    START TRANSACTION;
+
+    -- Deduz o valor da conta de origem
+    UPDATE contas SET saldo = saldo - valor WHERE id = conta_origem;
+
+    -- Adiciona o valor à conta de destino
+    UPDATE contas SET saldo = saldo + valor WHERE id = conta_destino;
+
+    -- Confirma a transação se tudo ocorreu bem
+    COMMIT;
+
+    SELECT 'Transação concluída com sucesso';
+END //
+
+DELIMITER ;
+```
+
+### Explicação do Exemplo
+- **DECLARE EXIT HANDLER FOR SQLEXCEPTION:** Define um manipulador que desfaz a transação e retorna uma mensagem de erro se ocorrer uma exceção SQL.
+- **START TRANSACTION:** Inicia uma nova transação.
+- **ROLLBACK:** Desfaz todas as operações se ocorrer um erro.
+- **COMMIT:** Confirma todas as operações se tudo ocorrer bem.
+
+Esses são os conceitos básicos de tratamento de erros e transações no MySQL. Eles são ferramentas poderosas para garantir a integridade dos dados e lidar com situações de erro de maneira controlada.
