@@ -595,6 +595,94 @@ DELIMITER ;
 - **DECLARE CONTINUE HANDLER FOR SQLEXCEPTION:** Define um manipulador que continua a execução e define uma mensagem de erro na variável `@erro` se ocorrer uma exceção SQL.
 - **SQLEXCEPTION:** Captura qualquer erro SQL.
 
+# Triggers e Indexes no MySQL
+
+## Triggers
+
+Um trigger (gatilho) é um conjunto de instruções SQL que são automaticamente executadas (ou "disparadas") em resposta a certos eventos em uma tabela, como inserções, atualizações ou exclusões. Triggers são úteis para garantir a integridade dos dados, auditar alterações e aplicar regras de negócios.
+
+### Sintaxe para Criar um Trigger
+Para criar um trigger, usamos a instrução `CREATE TRIGGER`.
+
+```sql
+CREATE TRIGGER nome_do_trigger
+[BEFORE | AFTER] [INSERT | UPDATE | DELETE]
+ON nome_da_tabela
+FOR EACH ROW
+BEGIN
+    -- Corpo do trigger
+    instruções_sql;
+END;
+```
+
+### Exemplo de Trigger
+```sql
+DELIMITER //
+
+CREATE TRIGGER AtualizarEstoque
+AFTER INSERT ON vendas
+FOR EACH ROW
+BEGIN
+    UPDATE produtos
+    SET quantidade = quantidade - NEW.quantidade_vendida
+    WHERE id = NEW.produto_id;
+END //
+
+DELIMITER ;
+```
+
+### Explicação do Exemplo
+- **AFTER INSERT:** O trigger é disparado após uma inserção na tabela `vendas`.
+- **FOR EACH ROW:** O trigger é executado para cada linha afetada.
+- **NEW:** Referencia os valores dos novos dados inseridos na linha.
+
+### Benefícios dos Triggers
+- Garantir a integridade dos dados.
+- Automatizar tarefas repetitivas.
+- Auditar e registrar alterações nos dados.
+
+## Indexes
+
+Um índice (index) é uma estrutura de dados que melhora a velocidade das operações de leitura em uma tabela. Indexes são usados para buscar rapidamente dados em uma coluna ou conjunto de colunas. No entanto, eles podem aumentar o tempo de gravação e a complexidade do gerenciamento de dados.
+
+### Tipos de Indexes
+- **PRIMARY KEY:** Um índice único que identifica exclusivamente cada linha em uma tabela.
+- **UNIQUE:** Garante que todos os valores em uma coluna ou conjunto de colunas sejam únicos.
+- **INDEX:** Um índice padrão que melhora a velocidade das consultas.
+- **FULLTEXT:** Usado para pesquisas de texto completo em colunas de texto.
+
+### Sintaxe para Criar um Índice
+Para criar um índice, usamos a instrução `CREATE INDEX`.
+
+```sql
+CREATE INDEX nome_do_indice
+ON nome_da_tabela (coluna1, coluna2, ...);
+```
+
+### Exemplo de Índice
+```sql
+CREATE INDEX idx_nome
+ON alunos (nome);
+```
+
+### Exemplo de Índice Único
+```sql
+CREATE UNIQUE INDEX idx_email
+ON professores (email);
+```
+
+### Benefícios dos Índices
+- Melhorar a velocidade das consultas SELECT.
+- Aumentar a eficiência nas operações de busca e filtragem.
+- Facilitar a aplicação de restrições de unicidade.
+
+### Considerações ao Usar Índices
+- Índices podem aumentar o tempo de inserção, atualização e exclusão.
+- Índices ocupam espaço adicional no disco.
+- É importante balancear o uso de índices para garantir o desempenho ideal.
+
+---
+
 ## Transações
 
 Transações são usadas para garantir que um conjunto de operações SQL sejam executadas de maneira atômica, ou seja, todas as operações são executadas com sucesso ou nenhuma delas é aplicada. Isso é útil para manter a integridade dos dados.
