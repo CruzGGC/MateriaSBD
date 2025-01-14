@@ -125,7 +125,7 @@
 # Tipos de Restrições (Constraints) no MySQL
 
 ## PRIMARY KEY
-- **Descrição:** Identifica exclusivamente cada registro em uma tabela.
+- **Descrição:** Identifica exclusivamente cada registo numa tabela.
 - **Regras:**
   - Não pode haver valores duplicados.
   - Não pode haver valores NULL.
@@ -156,7 +156,7 @@ CREATE TABLE matriculas (
 ```
 
 ## UNIQUE
-- **Descrição:** Garante que todos os valores em uma coluna ou conjunto de colunas sejam únicos.
+- **Descrição:** Garante que todos os valores numa coluna ou conjunto de colunas sejam únicos.
 - **Regras:**
   - Não pode haver valores duplicados.
   - Pode haver valores NULL.
@@ -184,7 +184,7 @@ CREATE TABLE disciplinas (
 ```
 
 ## CHECK
-- **Descrição:** Garante que os valores em uma coluna satisfaçam uma condição específica.
+- **Descrição:** Garante que os valores numa coluna satisfaçam uma condição específica.
 - **Regras:**
   - Todos os valores na coluna devem satisfazer a condição definida.
 - **Exemplo:**
@@ -231,7 +231,7 @@ CREATE TABLE pedidos (
 ## Funções de Agregação
 
 ### COUNT
-- **Descrição:** Conta o número de linhas em um conjunto de resultados.
+- **Descrição:** Conta o número de linhas num conjunto de resultados.
 - **Exemplo:**
 ```sql
 SELECT COUNT(*) FROM alunos;
@@ -241,7 +241,7 @@ SELECT COUNT(nome) FROM alunos WHERE curso_id = 1;
 ```
 
 ### SUM
-- **Descrição:** Calcula a soma de valores em uma coluna numérica.
+- **Descrição:** Calcula a soma de valores numa coluna numérica.
 - **Exemplo:**
 ```sql
 SELECT SUM(salario) FROM funcionarios;
@@ -251,7 +251,7 @@ SELECT curso_id, SUM(notas) FROM alunos GROUP BY curso_id;
 ```
 
 ### AVG
-- **Descrição:** Calcula a média dos valores em uma coluna numérica.
+- **Descrição:** Calcula a média dos valores numa coluna numérica.
 - **Exemplo:**
 ```sql
 SELECT AVG(idade) FROM alunos;
@@ -290,7 +290,7 @@ SELECT 10 + 5;   -- Soma
 SELECT 10 - 5;   -- Subtração
 SELECT 10 * 5;   -- Multiplicação
 SELECT 10 / 5;   -- Divisão
-SELECT 10 % 3;   -- Modulo (Resto da divisão)
+SELECT 10 % 3;   -- Módulo (Resto da divisão)
 ```
 
 ### Expressões de String
@@ -335,7 +335,7 @@ FROM funcionarios;  -- Condicional CASE
 ## Subqueries
 
 ### Subqueries em Cláusulas SELECT
-- **Descrição:** Usadas para calcular valores em uma consulta principal.
+- **Descrição:** Usadas para calcular valores numa consulta principal.
 - **Exemplo:**
 ```sql
 SELECT nome, 
@@ -462,7 +462,7 @@ AND nome NOT IN (SELECT nome
 
 ## Procedimentos Armazenados
 
-Um procedimento armazenado (stored procedure) é um conjunto de instruções SQL que podem ser armazenadas e executadas no banco de dados. Eles permitem encapsular lógica complexa e reutilizável em uma única unidade, facilitando a manutenção e execução de operações repetitivas.
+Um procedimento armazenado (stored procedure) é um conjunto de instruções SQL que podem ser armazenadas e executadas no banco de dados. Eles permitem encapsular lógica complexa e reutilizável numa única unidade, facilitando a manutenção e execução de operações repetitivas.
 
 ### Sintaxe para Criar um Procedimento Armazenado
 Para criar um procedimento armazenado, usamos a instrução `CREATE PROCEDURE`.
@@ -580,7 +580,7 @@ BEGIN
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
         SET @erro = 'Ocorreu um erro durante a execução';
 
-    -- Tenta inserir um registro duplicado para gerar um erro
+    -- Tenta inserir um registo duplicado para gerar um erro
     INSERT INTO alunos (id, nome) VALUES (1, 'João');
     INSERT INTO alunos (id, nome) VALUES (1, 'Maria'); -- Esta linha causará um erro
 
@@ -608,7 +608,7 @@ Transações são usadas para garantir que um conjunto de operações SQL sejam 
 ```sql
 START TRANSACTION;
 
--- Tenta inserir um registro
+-- Tenta inserir um registo
 INSERT INTO contas (id, saldo) VALUES (1, 1000);
 
 -- Atualiza o saldo de uma conta
