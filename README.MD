@@ -654,5 +654,3 @@ DELIMITER ;
 - **START TRANSACTION:** Inicia uma nova transação.
 - **ROLLBACK:** Desfaz todas as operações se ocorrer um erro.
 - **COMMIT:** Confirma todas as operações se tudo ocorrer bem.
-
-Esses são os conceitos básicos de tratamento de erros e transações no MySQL. Eles são ferramentas poderosas para garantir a integridade dos dados e lidar com situações de erro de maneira controlada.
