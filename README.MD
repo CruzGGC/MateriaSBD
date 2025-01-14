@@ -422,11 +422,15 @@ AND nome NOT IN (SELECT nome
 
 ---
 
-# Procedimentos e Funções no MySQL
+# Procedimentos Armazenados e Funções no MySQL
 
 ## Procedimentos Armazenados
 
+Um procedimento armazenado (stored procedure) é um conjunto de instruções SQL que podem ser armazenadas e executadas no banco de dados. Eles permitem encapsular lógica complexa e reutilizável em uma única unidade, facilitando a manutenção e execução de operações repetitivas.
+
 ### Sintaxe para Criar um Procedimento Armazenado
+Para criar um procedimento armazenado, usamos a instrução `CREATE PROCEDURE`.
+
 ```sql
 CREATE PROCEDURE nome_do_procedimento (parâmetros)
 BEGIN
@@ -451,13 +455,24 @@ DELIMITER ;
 ```
 
 ### Chamando um Procedimento Armazenado
+Para chamar um procedimento armazenado, usamos a instrução `CALL`.
+
 ```sql
 CALL ObterAlunosPorCurso(1);
 ```
 
+### Benefícios dos Procedimentos Armazenados
+- Reutilização de código
+- Melhoria no desempenho
+- Segurança e controle de acesso
+
 ## Funções
 
+Uma função (function) é semelhante a um procedimento armazenado, mas ela retorna um valor único e pode ser usada em expressões SQL. As funções são úteis para encapsular lógica que precisa ser aplicada em diferentes partes de uma consulta.
+
 ### Sintaxe para Criar uma Função
+Para criar uma função, usamos a instrução `CREATE FUNCTION`.
+
 ```sql
 CREATE FUNCTION nome_da_funcao (parâmetros)
 RETURNS tipo_de_retorno
@@ -487,12 +502,19 @@ DELIMITER ;
 ```
 
 ### Usando uma Função
+Funções podem ser usadas em instruções SQL como qualquer outra função interna.
+
 ```sql
 SELECT nome, CalcularIdade(data_nascimento) AS idade 
 FROM alunos;
 ```
 
-Claro! Aqui está uma explicação sobre tratamento de erros e transações no MySQL em Markdown:
+### Benefícios das Funções
+- Encapsulamento de lógica repetitiva
+- Melhoria na legibilidade das consultas
+- Possibilidade de uso em diferentes partes de uma consulta
+
+---
 
 # Tratamento de Erros e Transações no MySQL
 
